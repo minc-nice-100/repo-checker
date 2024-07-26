@@ -4,9 +4,6 @@ on:
   schedule:
     - cron: '0 * * * *'  # 每小时运行一次，可以根据需要调整
   workflow_dispatch:  # 允许手动触发工作流
-    inputs:
-      repository:
-        description: 'Repository to check for changes'
 
 jobs:
   check_and_notify:
