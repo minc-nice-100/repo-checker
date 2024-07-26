@@ -1,8 +1,14 @@
-name: Check 和 Notify on Repo Change
+name: Check and Notify on Repo Change
 
 on:
   schedule:
     - cron: '0 * * * *'  # 每小时运行一次，可以根据需要调整
+  workflow_dispatch:  # 允许手动触发工作流
+    inputs:
+      repository:
+        description: 'Repository to check for changes'
+        required: true
+        default: 'other-user/other-repo'
 
 jobs:
   check_and_notify:
@@ -14,10 +20,10 @@ jobs:
 
     - name: Check for changes
       run: |
-        git clone https://github.com/redis/redis
+        git clone https://github.com/${{ github.event.inputs.repository }}.git
         cd other-repo
         git fetch
-        CHANGES=$(git diff --name-only origin/unstable)  # 可根据需要替换分支名
+        CHANGES=$(git diff --name-only origin/main)  # 可根据需要替换分支名
         if [ -n "$CHANGES" ]; then
           echo "Changes detected in the other repository: $CHANGES"
           echo "::set-output name=changes_detected::true"  # 将变量传递给后续步骤
@@ -26,8 +32,9 @@ jobs:
           echo "::set-output name=changes_detected::false"  # 将变量传递给后续步骤
         fi
 
+
     - name: Send email if changes detected
-      if: steps.check_和_notify.outputs.changes_detected == 'true'
+      if: steps.check_and_notify.outputs.changes_detected == 'true'
       uses: dawidd6/action-send-mail@v3
       with:
           server_address: ${{ secrets.EMAIL_HOST }}
