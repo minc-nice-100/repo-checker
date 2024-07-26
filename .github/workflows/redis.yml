@@ -18,7 +18,7 @@ jobs:
         git clone https://github.com/minc-nice-100/repo-checker.git
         cd repo-checker
         git fetch
-        CHANGES=$(git diff --name-only origin/unstable)  # 可根据需要替换分支名
+        CHANGES=$(git diff --name-only origin/main)  # 可根据需要替换分支名
         if [ -n "$CHANGES" ]; then
           echo "Changes detected in the other repository: $CHANGES"
           echo "::set-output name=changes_detected::true"  # 将变量传递给后续步骤
