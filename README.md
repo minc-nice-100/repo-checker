@@ -1,2 +1,2 @@
 # repo-checker
-Check and Notify on Repo Change
+**Check and Notify on Repo Change**
