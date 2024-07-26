@@ -19,7 +19,7 @@ jobs:
 
       - name: Run script to monitor public repository changes
         run: |
-          npm install
+          npm install nodemailer node-fetch
           node sendEmailOnPublicRepoChanges.js
         env:
           SMTP_HOST: ${{ secrets.EMAIL_HOST }}
