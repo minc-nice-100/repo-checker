@@ -1,41 +1,27 @@
-name: Check and Notify on Repo Change
+name: Monitor Public Repository Changes
 
 on:
   schedule:
-    - cron: '0 * * * *'  # 每小时运行一次，可以根据需要调整
-  workflow_dispatch:  # 允许手动触发工作流
+    - cron: '5 * * * *'
 
 jobs:
-  check_and_notify:
+  send-email-on-changes:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
-    - name: Check for changes
-      run: |
-        git clone https://github.com/minc-nice-100/repo-checker.git
-        cd repo-checker
-        git fetch
-        CHANGES=$(git diff --name-only origin/main)  # 可根据需要替换分支名
-        if [ -n "$CHANGES" ]; then
-          echo "Changes detected in the other repository: $CHANGES"
-          echo "::set-output name=changes_detected::true"  # 将变量传递给后续步骤
-        else
-          echo "No changes detected in the other repository"
-          echo "::set-output name=changes_detected::false"  # 将变量传递给后续步骤
-        fi
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-
-    - name: Send email if changes detected
-      if: steps.check_and_notify.outputs.changes_detected == 'true'
-      uses: dawidd6/action-send-mail@v3
-      with:
-          server_address: ${{ secrets.EMAIL_HOST }}
-          server_port: ${{ secrets.EMAIL_PORT }}
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Changes detected in other repository
-          body: Changes detected in the other repository. Please review the changes.
-          到: ${{ secrets.EMAIL_TO  }}
+      - name: Run script to monitor public repository changes
+        run: |
+          npm install
+          node sendEmailOnPublicRepoChanges.js
+        env:
+          SMTP_HOST: ${{ secrets.EMAIL_HOST }}
+          SMTP_PORT: ${{ secrets.EMAIL_PORT }}
+          SMTP_USER: ${{ secrets.EMAIL_USERNAME }}
+          SMTP_PASS: ${{ secrets.EMAIL_PASSWORD }}
