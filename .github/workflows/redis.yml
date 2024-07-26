@@ -1,4 +1,4 @@
-name: Check and Notify on Repo Change
+name: Check 和 Notify on Repo Change
 
 on:
   schedule:
@@ -27,13 +27,13 @@ jobs:
         fi
 
     - name: Send email if changes detected
-      if: steps.check_and_notify.outputs.changes_detected == 'true'
+      if: steps.check_和_notify.outputs.changes_detected == 'true'
       uses: dawidd6/action-send-mail@v3
       with:
-        server_address: ${{ secrets.EMAIL_HOST }}
-        server_port: ${{ secrets.EMAIL_PORT }}
-        username: ${{ secrets.EMAIL_USERNAME }}
-        password: ${{ secrets.EMAIL_PASSWORD }}
-        subject: Changes detected in other repository
-        body: Changes detected in the other repository: ${{ steps.check_和_notify.outputs.changes_detected }}
-        to: ${{ secrets.EMAIL_TO  }}
+          server_address: ${{ secrets.EMAIL_HOST }}
+          server_port: ${{ secrets.EMAIL_PORT }}
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Changes detected in other repository
+          body: Changes detected in the other repository. Please review the changes.
+          到: ${{ secrets.EMAIL_TO  }}
