@@ -16,7 +16,7 @@ jobs:
     - name: Check for changes
       run: |
         git clone https://github.com/redis/redis.git
-        cd other-repo
+        cd redis
         git fetch
         CHANGES=$(git diff --name-only origin/unstable)  # 可根据需要替换分支名
         if [ -n "$CHANGES" ]; then
