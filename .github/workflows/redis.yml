@@ -2,8 +2,8 @@ name: Monitor Public Repository Changes
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '5 * * * *'
+ // schedule:
+   // - cron: '5 * * * *'
 
 jobs:
   send-email-on-changes:
