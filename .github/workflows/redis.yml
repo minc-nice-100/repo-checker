@@ -7,8 +7,6 @@ on:
     inputs:
       repository:
         description: 'Repository to check for changes'
-        required: true
-        default: 'other-user/other-repo'
 
 jobs:
   check_and_notify:
